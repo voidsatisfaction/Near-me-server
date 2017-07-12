@@ -2,11 +2,11 @@ import axios from 'axios';
 
 import config from '../../env/config';
 
-const api = () => (
+const base = () => (
   axios.create({
     baseURL: config.host,
     headers: { 'Content-Type': 'application/json' }
   })
 );
 
-export default api
+export const api = base();
