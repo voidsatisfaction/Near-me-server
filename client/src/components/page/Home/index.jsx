@@ -115,10 +115,8 @@ export default class Home extends Component {
   }
 
   render() {
-    console.log(this.state);
     const { userInfo, defaultCenter } = this.state;
     const eventInfo = this.state.eventInfo.map(markerData);
-    console.log(eventInfo);
     return (
       <div style={{ width: '100vw', height: '100vh', margin: '0 auto' }}>
         <h1>Near me</h1>
