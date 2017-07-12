@@ -4,7 +4,8 @@ import config from '../../env/config';
 
 const api = () => (
   axios.create({
-    baseURL: config.host
+    baseURL: config.host,
+    headers: { 'Content-Type': 'application/json' }
   })
 );
 
