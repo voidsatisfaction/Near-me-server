@@ -6,17 +6,27 @@ import api from '../../../api';
 
 const kyotoLocation = { lat: 35.02107, lng: 135.75385 };
 
+function markerData(eventInfo) {
+  const title = eventInfo.title || 'no title';
+  const position = { lat: Number(eventInfo.lat) || 0, lng: Number(eventInfo.lon) || 0 };
+  return {
+    title,
+    position
+  };
+}
+
 const GettingStartedGoogleMap = withGoogleMap((props) => {
   return (
     <GoogleMap
       ref={props.onMapLoad}
       defaultZoom={11}
-      defaultCenter={kyotoLocation}
+      defaultCenter={props.defaultCenter}
     >
       {
-        props.markers.map((marker) => (
+        props.eventInfo.map((eventInfo, i) => (
           <Marker
-            { ...marker }
+            { ...eventInfo }
+            key={i}
           />
         ))
       }
@@ -33,22 +43,16 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      defaultCenter: kyotoLocation,
       eventInfo: [],
       userInfo: {
         position: {
           name: '',
           lat: 0,
-          long: 0
+          lng: 0
         },
       },
-      markers: [{
-        position: {
-          lat: 35.02107,
-          lng: 135.75385,
-        },
-        key: `My place`,
-        defaultAnimation: 2,
-      }],
+      markers: [],
     };
     this.handleMapLoad = this.handleMapLoad.bind(this);
     this.getDataSucceedHoc = this.getDataSucceedHoc.bind(this);
@@ -112,11 +116,13 @@ export default class Home extends Component {
 
   render() {
     console.log(this.state);
-    const { markers, userInfo } = this.state;
+    const { userInfo, defaultCenter } = this.state;
+    const eventInfo = this.state.eventInfo.map(markerData);
+    console.log(eventInfo);
     return (
       <div style={{ width: '100vw', height: '100vh', margin: '0 auto' }}>
-        <h1>This is home</h1>
-        <p>Hello home!</p>
+        <h1>Near me</h1>
+        <p>It is IT events near you!</p>
         <div style={{ width: '50%', height: '50%' }}>
           <GettingStartedGoogleMap
             containerElement={
@@ -126,8 +132,9 @@ export default class Home extends Component {
               <div style={{ height: `100%` }} />
             }
             onMapLoad={this.handleMapLoad}
-            markers={this.state.markers}
+            eventInfo={eventInfo}
             userInfo={userInfo}
+            defaultCenter={defaultCenter}
           />
         </div>
       </div>     
