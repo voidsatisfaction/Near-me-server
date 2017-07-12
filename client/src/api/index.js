@@ -5,12 +5,12 @@ function getCurrentLocationName({ lat, lng }) {
     .then((res) => (res));
 }
 
-function getNearEvent({ placeName }) {
-  return api.get(`/myplace/event?place=${placeName}`)
+function getNearEvents(placeName) {
+  return api.get(`/myplace/events?place=${placeName}`)
     .then((res) => (res));
 }
 
 export default {
   getCurrentLocationName,
-  getNearEvent,
+  getNearEvents,
 };
