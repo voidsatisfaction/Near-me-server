@@ -6,7 +6,8 @@
   "author": "voidSatisfaction <lourie@naver.com>",
   "license": "MIT",
   "scripts": {
-    "start": "source ./env.sh && node index.js",
+    "start": "node index.js",
+    "local": "source ./env.sh && node index.js",
     "dev": "./node_modules/supervisor/lib/cli-wrapper.js index.js"
   },
   "dependencies": {
