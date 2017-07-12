@@ -12,6 +12,7 @@ var PORT = process.env.PORT || 3003;
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(__dirname + '/build'));
 
 app.get('/', function(req, res) {
   res.send('worked');
