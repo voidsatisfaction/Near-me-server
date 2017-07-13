@@ -20,6 +20,7 @@ app.get('/', function(req, res) {
 
 var yahooMapHost = 'https://map.yahooapis.jp/placeinfo/V1/get';
 var yahooAppId = 'dj00aiZpPUFuRWxDTE5rZFBBayZzPWNvbnN1bWVyc2VjcmV0Jng9MmE-';
+var connpassHost = 'https://connpass.com/api/v1/event/';
 
 app.get('/myplace', function(req, res) {
   var lat = req.query.lat;
@@ -34,29 +35,29 @@ app.get('/myplace', function(req, res) {
 
   rp(options)
     .then((data) => {
-      res.status(200).json(data);
+      return data.ResultSet.Address[0];
     })
     .catch((error) => {
       res.status(500);
     })
-});
-
-var connpassHost = 'https://connpass.com/api/v1/event/';
-
-app.get('/myplace/events', function(req, res) {
-  var place = encodeURIComponent(req.query.place);
-  var uri = `${connpassHost}?keyword=${place}`;
-  var options = {
-    method: 'GET',
-    uri,
-    json: true,
-    headers: {
-      'User-Agent': 'Request-Promise'
-    }
-  };
-  rp(options)
-    .then((data) => {
-      res.status(200).json(data);
+    .then((place) => {
+      var place = encodeURIComponent(place);
+      var uri = `${connpassHost}?keyword=${place}`;
+      var options = {
+        method: 'GET',
+        uri,
+        json: true,
+        headers: {
+          'User-Agent': 'Request-Promise'
+        }
+      };
+      return rp(options)
+        .then((data) => {
+          res.status(200).json(data);
+        })
+        .catch((error) => {
+          res.status(500);
+        })
     })
     .catch((error) => {
       res.status(500);

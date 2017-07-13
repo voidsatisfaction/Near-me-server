@@ -60,7 +60,6 @@ export default class Home extends Component {
 
   componentDidMount() {
     this.getUserLocation()
-      .then(this.getUserLocationName)
       .then(this.getUserNearEvents)
       .then((res) => {
         const eventInfo = res.data.events;
@@ -97,13 +96,8 @@ export default class Home extends Component {
     console.error('fail');
   }
 
-  getUserLocationName(location) {
+  getUserNearEvents(location) {
     return api.getCurrentLocationName(location)
-      .then((res) => res.data.ResultSet.Address[0]);
-  }
-
-  getUserNearEvents(name) {
-    return api.getNearEvents(name)
       .then((res) => res);
   }
 
