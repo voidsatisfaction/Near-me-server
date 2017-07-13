@@ -58,7 +58,7 @@ export default class Home extends Component {
     this.getDataSucceedHoc = this.getDataSucceedHoc.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.getUserLocation()
       .then(this.getUserNearEvents)
       .then((res) => {
