@@ -97,7 +97,7 @@ export default class Home extends Component {
   }
 
   getUserNearEvents(location) {
-    return api.getCurrentLocationName(location)
+    return api.getNearEvents(location)
       .then((res) => res);
   }
 
