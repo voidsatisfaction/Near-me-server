@@ -1,0 +1,12 @@
+.home-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.home-main {
+  height: 75%;
+}
+
+.googlemap-container {
+  margin: 10px 10px
+}

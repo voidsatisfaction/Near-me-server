@@ -4,6 +4,8 @@ import { withGoogleMap, GoogleMap, Marker, Circle } from 'react-google-maps';
 
 import api from '../../../api';
 
+import './style.css';
+
 const initialZoomLevel = 13;
 const kyotoLocation = { lat: 35.02107, lng: 135.75385 };
 
@@ -113,14 +115,14 @@ export default class Home extends Component {
     const { userInfo, defaultCenter } = this.state;
     const eventInfo = this.state.eventInfo.map(markerData);
     return (
-      <div className="row" style={{ width: '100vw', height: '100vh' }}>
+      <div className="row home-container">
         <section className="col span-1-of-6"/>
-        <div className="col span-2-of-3" style={{ height: '75%' }}>
-          <h1>Near me</h1>
-          <p>It is IT events near you!</p>
+        <section className="col span-2-of-3 home-main">
+          <h1 className="title-text">Near me</h1>
+          <p className="lead-text" >It is IT events near you!</p>
           <GettingStartedGoogleMap
             containerElement={
-              <div style={{ height: `100%` }} />
+              <div className="googlemap-container" style={{ height: `100%` }} />
             }
             mapElement={
               <div style={{ height: `100%` }} />
@@ -130,7 +132,7 @@ export default class Home extends Component {
             userInfo={userInfo}
             defaultCenter={defaultCenter}
           />
-        </div>
+        </section>
         <section className="col span-1-of-6"/>
       </div>     
     );
