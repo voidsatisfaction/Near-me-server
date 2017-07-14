@@ -1,6 +1,7 @@
 /* global google */
 import React, { Component } from 'react';
 import { withGoogleMap, GoogleMap, Marker, Circle } from 'react-google-maps';
+import Button from '../../atom/Button';
 
 import api from '../../../api';
 
@@ -118,8 +119,12 @@ export default class Home extends Component {
       <div className="row home-container">
         <section className="col span-1-of-6"/>
         <section className="col span-2-of-3 home-main">
-          <h1 className="title-text">Near me</h1>
-          <p className="lead-text" >It is IT events near you!</p>
+          <div className="sub-title">
+            Find IT conferences near you!
+            <Button 
+              text="Find now!"
+            />
+          </div>
           <GettingStartedGoogleMap
             containerElement={
               <div className="googlemap-container" style={{ height: `100%` }} />
