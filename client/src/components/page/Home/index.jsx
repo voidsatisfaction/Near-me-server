@@ -47,9 +47,11 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showEvent: false,
       defaultCenter: kyotoLocation,
       eventInfo: [],
       userInfo: {
+        loading: true,
         position: {
           name: '',
           lat: 0,
@@ -60,6 +62,7 @@ export default class Home extends Component {
     };
     this.handleMapLoad = this.handleMapLoad.bind(this);
     this.getDataSucceedHoc = this.getDataSucceedHoc.bind(this);
+    this.showEvent = this.showEvent.bind(this);
   }
 
   componentWillMount() {
@@ -112,19 +115,30 @@ export default class Home extends Component {
     }
   }
 
+  showEvent() {
+    this.setState({ showEvent: true });
+  }
+
   render() {
-    const { userInfo, defaultCenter } = this.state;
+    const { userInfo, defaultCenter, showEvent } = this.state;
     const eventInfo = this.state.eventInfo.map(markerData);
     return (
       <div className="row home-container">
         <section className="col span-1-of-6"/>
         <section className="col span-2-of-3 home-main">
-          <div className="sub-title">
-            Find IT conferences near you!
-            <Button 
-              text="Find now!"
-            />
-          </div>
+          {
+            userInfo.loading ?
+            <div className="sub-title">
+              Now loading...
+            </div> :
+            <div className="sub-title">
+              Find IT conferences near you!
+              <Button
+                onClick={this.showEvent}
+                text="Find now!"
+              />
+            </div> 
+          }
           <GettingStartedGoogleMap
             containerElement={
               <div className="googlemap-container" style={{ height: `100%` }} />
@@ -133,7 +147,7 @@ export default class Home extends Component {
               <div style={{ height: `100%` }} />
             }
             onMapLoad={this.handleMapLoad}
-            eventInfo={eventInfo}
+            eventInfo={showEvent ? eventInfo : []}
             userInfo={userInfo}
             defaultCenter={defaultCenter}
           />
