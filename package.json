@@ -11,7 +11,8 @@
   "scripts": {
     "start": "node index.js",
     "local": "source ./env.sh && node index.js",
-    "dev": "./node_modules/supervisor/lib/cli-wrapper.js index.js"
+    "dev": "./node_modules/supervisor/lib/cli-wrapper.js index.js",
+    "deploy": "cd client && yarn build && cp -R ./build ../ && cd .."
   },
   "dependencies": {
     "body-parser": "^1.17.2",
