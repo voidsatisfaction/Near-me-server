@@ -55,8 +55,10 @@ function getUserLocation({ lat, lon }) {
 function getEvents(place) {
   var connpassHost = 'https://connpass.com/api/v1/event/';
 
-  var place = encodeURIComponent(place);
-  var uri = `${connpassHost}?keyword=${place}&count=100`;
+  var prefacture = encodeURIComponent(place.slice(0,-1));
+  var prefactureFull = encodeURIComponent(place)
+
+  var uri = `${connpassHost}?keyword_or=${prefactureFull}&count=100&order=2`;
   var options = {
     method: 'GET',
     uri,
