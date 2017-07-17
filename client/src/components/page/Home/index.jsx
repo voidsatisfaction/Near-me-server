@@ -12,7 +12,10 @@ const kyotoLocation = { lat: 35.02107, lng: 135.75385 };
 
 function markerData(eventInfo) {
   const title = eventInfo.title || 'no title';
-  const position = { lat: Number(eventInfo.lat) || 0, lng: Number(eventInfo.lon) || 0 };
+  const position = {
+    lat: Number(eventInfo.lat) || 0,
+    lng: Number(eventInfo.lon) || Number(eventInfo.lng) || 0
+  };
   const eventUrl = eventInfo.event_url
   return {
     title,
@@ -29,10 +32,10 @@ const GettingStartedGoogleMap = withGoogleMap((props) => {
       defaultCenter={props.defaultCenter}
     >
       {
-        props.eventInfo.map((eventInfo, i) => (
+        props.markerInfo.map((info, i) => (
           <Marker
-            { ...eventInfo }
-            onClick={props.markerOnClick(eventInfo.eventUrl)}
+            { ...info }
+            onClick={props.markerOnClick(info.eventUrl)}
             key={i}
           />
         ))
@@ -52,7 +55,11 @@ export default class Home extends Component {
     this.state = {
       showEvent: false,
       defaultCenter: kyotoLocation,
-      eventInfo: [],
+      eventInfo: {
+        connpass: [],
+        doorkeeper: []
+      },
+      markerInfo: [],
       userInfo: {
         loading: true,
         position: {
@@ -72,8 +79,12 @@ export default class Home extends Component {
     this.getUserLocation()
       .then(this.getUserNearEvents)
       .then((res) => {
-        const eventInfo = res.data.events;
-        this.setState({ eventInfo })
+        const eventInfo = res.data;
+        const markerInfo = this.extractEventInfo(eventInfo).map(markerData);
+        this.setState({
+          eventInfo,
+          markerInfo,
+        });
       });
   }
 
@@ -128,9 +139,20 @@ export default class Home extends Component {
     };
   }
 
+  extractEventInfo(eventInfo) {
+    return Object.keys(eventInfo).reduce((prev,current) => {
+      return prev.concat(eventInfo[current]);
+    },[]);
+  }
+
   render() {
-    const { userInfo, defaultCenter, showEvent } = this.state;
-    const eventInfo = this.state.eventInfo.map(markerData);
+    const {
+      userInfo,
+      defaultCenter,
+      showEvent,
+      eventInfo,
+      markerInfo
+    } = this.state;
     return (
       <div className="row home-container">
         <section className="col span-1-of-6"/>
@@ -156,7 +178,7 @@ export default class Home extends Component {
               <div style={{ height: `100%` }} />
             }
             onMapLoad={this.handleMapLoad}
-            eventInfo={showEvent ? eventInfo : []}
+            markerInfo={showEvent ? markerInfo : []}
             userInfo={userInfo}
             defaultCenter={defaultCenter}
             markerOnClick={this.markerOnClick}
