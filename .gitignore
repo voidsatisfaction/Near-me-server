@@ -4,6 +4,6 @@ client/node_modules/*
 
 client/build/*
 
-env.*.sh
+.env
 
 vendor/*
