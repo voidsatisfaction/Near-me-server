@@ -7,7 +7,9 @@ module:testrunner
 # module:jobs
 
 
-GET     /                                       App.Index
+GET     /                                       Static.Serve("static","index.html")
+
+GET     /static/*filepath                       Static.Serve("static")
 
 GET     /myplace                                App.Myplace
 
