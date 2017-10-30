@@ -9,7 +9,10 @@ RUN apt-get update && \
 RUN go get github.com/revel/revel && \
     go get github.com/revel/cmd/revel
 
-# change current dir
-RUN mkdir /go/src/near_me_server
+# Add our code
+ADD . /go/src/near_me_server
+WORKDIR /go/src/near_me_server
 
-EXPOSE 9000
+# EXPOSE 9000
+
+CMD revel run near_me_server prod $PORT
