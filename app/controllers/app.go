@@ -3,6 +3,7 @@ package controllers
 import (
 	"near_me_server/app/api"
 	"near_me_server/app/factory"
+	"near_me_server/app/services"
 
 	"github.com/revel/revel"
 )
@@ -26,11 +27,13 @@ func (c App) Myplace() revel.Result {
 
 	events := factory.Events{}
 
-	connpassEventNums := 100
-	connpassEvents, err := api.ConnpassGetEvents(city, connpassEventNums)
+	es, err := services.GetAllEvents(city)
 	if err != nil {
 		return c.RenderError(err)
 	}
+
+	connpassEvents := es.Connpass
+	doorkeeperEvents := es.Doorkeeper
 
 	// add connpass events
 	for _, connpassEvent := range connpassEvents {
@@ -39,11 +42,6 @@ func (c App) Myplace() revel.Result {
 		if event.WillHold() {
 			events.Data = append(events.Data, *event)
 		}
-	}
-
-	doorkeeperEvents, err := api.DoorkeeperGetEvents(city, 0)
-	if err != nil {
-		return c.RenderError(err)
 	}
 
 	// add doorkeeper events
