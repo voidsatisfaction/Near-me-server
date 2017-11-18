@@ -21,7 +21,7 @@ type Events struct {
 // }
 
 type Event struct {
-	EventId   uint32    `json:"event_id"`
+	EventID   uint32    `json:"event_id"`
 	EventURL  string    `json:"event_url"`
 	StartedAt time.Time `json:"started_at"`
 	Lat       string    `json:"lat"`
@@ -37,7 +37,7 @@ func (e *Event) ConnpassAssign(ce *api.ConnpassEvent) {
 		return
 	}
 	e.Title = ce.Title
-	e.EventId = ce.EventId
+	e.EventID = ce.EventID
 	e.EventURL = ce.EventURL
 	e.StartedAt = ce.StartedAt
 	e.Lat = ce.Lat
@@ -51,7 +51,7 @@ func (e *Event) DoorkeeperAssign(de *api.DoorkeeperEvent) {
 		return
 	}
 	e.Title = de.Event.Title
-	e.EventId = de.Event.ID
+	e.EventID = de.Event.ID
 	e.EventURL = de.Event.PublicURL
 	e.StartedAt = de.Event.StartsAt
 	e.Lat = de.Event.Lat
