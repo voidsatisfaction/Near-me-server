@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -24,22 +23,32 @@ type DoorkeeperEvent struct {
 	} `json:"event"`
 }
 
-func DoorkeeperGetEvents(city string, nums int) DoorkeeperEvents {
+func DoorkeeperGetEvents(city string, nums int) (DoorkeeperEvents, error) {
 	key := os.Getenv("DOORKEEPER_KEY")
-	fmt.Println("key:", key)
 	host := "https://api.doorkeeper.jp/"
 	url := host + "events?q=" + city + "&sort=starts_at"
 
-	req, _ := http.NewRequest("GET", url, nil)
+	doorkeeperEvents := DoorkeeperEvents{}
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return doorkeeperEvents, err
+	}
 	req.Header.Add("Authorization", "Bearer "+key)
 	req.Header.Add("Content-Type", "application/json")
 	// not parsed
 	client := &http.Client{}
-	resp, _ := client.Do(req)
-	body, _ := ioutil.ReadAll(resp.Body)
+	resp, err := client.Do(req)
+	if err != nil {
+		return doorkeeperEvents, err
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return doorkeeperEvents, err
+	}
 	defer resp.Body.Close()
 
-	doorkeeperEvents := DoorkeeperEvents{}
 	json.Unmarshal(body, &doorkeeperEvents)
-	return doorkeeperEvents
+	return doorkeeperEvents, nil
 }

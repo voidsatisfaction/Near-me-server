@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"os"
 )
 
 type MyAddress struct {
@@ -12,16 +13,22 @@ type MyAddress struct {
 	} `json:"ResultSet"`
 }
 
-func YahooGetLocation(latitude string, longitude string) string {
+func YahooGetLocation(latitude string, longitude string) (string, error) {
 	// TODO move this data to conf
-	yahooAppID := "dj00aiZpPUFuRWxDTE5rZFBBayZzPWNvbnN1bWVyc2VjcmV0Jng9MmE-"
-	resp, _ := http.Get("https://map.yahooapis.jp/placeinfo/V1/get?appid=" + yahooAppID + "&lat=" + latitude + "&lon=" + longitude)
-	body, _ := ioutil.ReadAll(resp.Body)
+	yahooAppID := os.Getenv("YAHOO_APP_KEY")
+	resp, err := http.Get("https://map.yahooapis.jp/placeinfo/V1/get?appid=" + yahooAppID + "&lat=" + latitude + "&lon=" + longitude)
+	if err != nil {
+		return "", err
+	}
 	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
 
 	var myAddress MyAddress
 	json.Unmarshal(body, &myAddress)
 
 	city := myAddress.ResultSet.Address[0]
-	return city
+	return city, nil
 }

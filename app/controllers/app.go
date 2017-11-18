@@ -19,11 +19,18 @@ func (c App) Myplace() revel.Result {
 	latitude := c.Params.Query.Get("lat")
 	longitude := c.Params.Query.Get("lng")
 
-	city := api.YahooGetLocation(latitude, longitude)
+	city, err := api.YahooGetLocation(latitude, longitude)
+	if err != nil {
+		return c.RenderError(err)
+	}
+
+	events := factory.Events{}
 
 	connpassEventNums := 100
-	connpassEvents := api.ConnpassGetEvents(city, connpassEventNums)
-	events := factory.Events{}
+	connpassEvents, err := api.ConnpassGetEvents(city, connpassEventNums)
+	if err != nil {
+		return c.RenderError(err)
+	}
 
 	// add connpass events
 	for _, connpassEvent := range connpassEvents {
@@ -34,7 +41,10 @@ func (c App) Myplace() revel.Result {
 		}
 	}
 
-	doorkeeperEvents := api.DoorkeeperGetEvents(city, 0)
+	doorkeeperEvents, err := api.DoorkeeperGetEvents(city, 0)
+	if err != nil {
+		return c.RenderError(err)
+	}
 
 	// add doorkeeper events
 	for _, doorkeeperEvent := range doorkeeperEvents {

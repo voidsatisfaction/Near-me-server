@@ -9,12 +9,15 @@ import (
 )
 
 type ConnpassEvents struct {
-	ResultNums int             `json:"results_returned"`
-	Data       []ConnpassEvent `json:"events"`
+	Data []ConnpassEvent `json:"events"`
+}
+
+func (ce *ConnpassEvents) getEventNum() int {
+	return len(ce.Data)
 }
 
 type ConnpassEvent struct {
-	EventId   uint32    `json:"event_id"`
+	EventID   uint32    `json:"event_id"`
 	EventURL  string    `json:"event_url"`
 	StartedAt time.Time `json:"started_at"`
 	Lat       string    `json:"lat"`
@@ -24,16 +27,24 @@ type ConnpassEvent struct {
 	Place     string    `json:"place"`
 }
 
-func ConnpassGetEvents(city string, nums int) []ConnpassEvent {
+func ConnpassGetEvents(city string, nums int) ([]ConnpassEvent, error) {
 	if nums == 0 {
 		nums = 10
 	}
+	var connpassEvents ConnpassEvents
+
 	host := "https://connpass.com/api/v1/event/?"
-	resp, _ := http.Get(host + "keyword=" + city + "&count=" + strconv.Itoa(nums))
-	body, _ := ioutil.ReadAll(resp.Body)
+	resp, err := http.Get(host + "keyword=" + city + "&count=" + strconv.Itoa(nums))
+	if err != nil {
+		return []ConnpassEvent{}, err
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return []ConnpassEvent{}, err
+	}
 	defer resp.Body.Close()
 
-	var connpassEvents ConnpassEvents
 	json.Unmarshal(body, &connpassEvents)
-	return connpassEvents.Data
+	return connpassEvents.Data, nil
 }
