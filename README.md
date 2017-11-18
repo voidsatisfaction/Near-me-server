@@ -9,6 +9,13 @@
 
 ## Deployment
 
+`heroku container:push web`
+
 Docker + Heroku
 
 [Container Registry & Runtime - heroku](https://devcenter.heroku.com/articles/container-registry-and-runtime#dockerfile-commands-and-runtime)
+
+## How to start on local environment
+
+1. `source .env`
+2. revel run near_me_server
