@@ -10,3 +10,5 @@ vendor/*
 
 app/routes/*
 app/tmp/*
+
+static/
