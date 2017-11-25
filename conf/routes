@@ -13,6 +13,8 @@ GET     /static/*filepath                       Static.Serve("static")
 
 GET     /myplace                                App.Myplace
 
+GET     /public/getNearEvents                   App.PublicGetNearEvents
+
 GET     /ping                                   App.Ping
 
 # Ignore favicon requests
