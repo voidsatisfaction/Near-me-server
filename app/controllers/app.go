@@ -64,6 +64,8 @@ func (c App) Myplace() revel.Result {
 	return c.RenderJSON(events)
 }
 
+const cacheInterval = 1 * time.Hour
+
 func (c App) PublicGetNearEvents() revel.Result {
 	latitude := c.Params.Query.Get("lat")
 	longitude := c.Params.Query.Get("lng")
@@ -106,7 +108,7 @@ func (c App) PublicGetNearEvents() revel.Result {
 		}
 		events.Size = len(events.Data)
 
-		go cache.Set(ul, events, 24*time.Hour)
+		go cache.Set(ul, events, cacheInterval)
 
 		return c.RenderJSON(events)
 	}
